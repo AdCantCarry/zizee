@@ -483,17 +483,71 @@ ${aiBrief ? aiBrief : `Quốc gia **${commonName}** sở hữu nét văn hóa v�
   }
 
   generateGeneralSmartReply(userPrompt, matchedDoc) {
-    if (matchedDoc) {
-      return `Dạ Zizee đã tra cứu trong kho kiến thức của bạn và tìm thấy thông tin từ tài liệu **"${matchedDoc.title}"**:
+    let fileContent = '';
+    let fileName = '';
 
-> ${matchedDoc.summary}
+    if (userPrompt.includes('--- TỆP ĐÍNH KÈM TỪ NGƯỜI DÙNG:')) {
+      const parts = userPrompt.split('--- TỆP ĐÍNH KÈM TỪ NGƯỜI DÙNG:');
+      if (parts[1]) {
+        const fileBlock = parts[1].split('-----------------------------------');
+        fileName = fileBlock[0].split('\n')[0].replace('---', '').trim();
+        fileContent = fileBlock[0] || '';
+      }
+    } else if (matchedDoc) {
+      fileName = matchedDoc.title;
+      fileContent = matchedDoc.content;
+    }
 
-Trích dẫn:
-\`\`\`
-${matchedDoc.content.substring(0, 500)}...
-\`\`\`
+    const tipHeader = `> 💡 *Mẹo: Bạn hãy nhấn nút 🔑 **Cấu Hình API Keys** ở góc trên cùng để dán Groq Key / Gemini Key giúp Zizee sáng tạo bài viết linh hoạt 100% bằng AI nhé! Dưới đây là nội dung Zizee đã trích xuất & biên tập cho bạn:* \n\n`;
 
-Bạn cần Zizee hỗ trợ trích xuất chi tiết hay biên tập nội dung nào từ tài liệu này không?`;
+    if (fileContent || fileName) {
+      const topic = fileName.replace(/[^a-zA-Z0-9 đĐàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/gi, '').trim() || 'SỰ KIỆN NỔI BẬT';
+      
+      let location = 'Được tổ chức trang trọng tại địa điểm chỉ định';
+      let timeStr = 'Theo kế hoạch đã ban hành';
+      if (fileContent.includes('Địa điểm')) {
+        const locLine = fileContent.split('Địa điểm')[1].split('\n')[0].replace(/[:\-()]/g, '').trim();
+        if (locLine) location = locLine;
+      }
+      if (fileContent.includes('Thời gian')) {
+        const timeLine = fileContent.split('Thời gian')[1].split('\n')[0].replace(/[:\-()]/g, '').trim();
+        if (timeLine) timeStr = timeLine;
+      }
+
+      return tipHeader + `📢 **BÀI VIẾT TRUYỀN THÔNG TỪ TỆP "${topic.toUpperCase()}"**
+
+---
+
+### 📢 PHƯƠNG ÁN 1: BÀI ĐĂNG THÔNG BÁO MẠNG XÃ HỘI (FANPAGE / FACEBOOK)
+
+🎉 **CHÀO MỪNG SỰ KIỆN: ${topic.toUpperCase()}**
+
+📍 **Địa điểm:** ${location}
+
+⏰ **Thời gian:** ${timeStr}
+
+🏥 **Nội dung trọng tâm:**
+${fileContent.substring(0, 400).replace(/```/g, '')}...
+
+✨ Sự kiện đánh dấu bước phát triển quan trọng, nâng cao chất lượng phục vụ và đáp ứng sự kỳ vọng của nhân dân, thầy cô & phụ huynh!
+
+👉 Trân trọng kính mời quý đại biểu, quý phụ huynh cùng toàn thể nhân dân theo dõi và hưởng ứng!
+
+#SuKien;#TinTuc;#TruyenThong;#ThongBao
+
+---
+
+### 📰 PHƯƠNG ÁN 2: BÀI VIẾT TÓM TẮT ĐIỂM TIN SỰ KIỆN CHI TIẾT
+
+🚀 **TÓM TẮT KỊCH BẢN & ĐIỂM TIN: ${topic.toUpperCase()}**
+
+📍 Sự kiện **${topic}** được triển khai với các nội dung chính:
+
+1. **Đón tiếp & Văn nghệ chào mừng:** Chuẩn bị chu đáo các tiết mục văn nghệ đặc sắc chào mừng quý đại biểu.
+2. **Tuyên bố lý do & Giới thiệu đại biểu:** Khẳng định ý nghĩa và vai trò của sự kiện đối với cộng đồng.
+3. **Phát biểu chỉ đạo & Bàn giao:** Ghi nhận sự đóng góp của các cá nhân, tập thể và đơn vị liên quan.
+
+📢 Xin trân trọng thông báo và kính mời toàn thể quý vị cùng đón xem!`;
     }
 
     return `Chào bạn! Zizee đã nhận được yêu cầu: *"${userPrompt}"*.
@@ -504,6 +558,6 @@ Zizee có thể giúp bạn ngay lập tức:
 - ⚡ **Tóm tắt & Đọc tệp:** Đính kèm file PDF, Word, TXT để Zizee đọc và phân tích.
 - 📰 **Điểm tin thời sự** & 🌍 **Tra cứu thông tin các quốc gia thế giới**.
 
-Bạn muốn Zizee thực hiện công việc gì tiếp theo nhé! 🚀`;
+💡 *Mẹo:* Bạn nhấn nút **🔑 Cấu Hình API Keys** ở góc trên cùng để dán API Key của bạn giúp Zizee trả lời trực tiếp 100% nhé! 🚀`;
   }
 }
