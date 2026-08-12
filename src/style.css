@@ -582,3 +582,82 @@ body {
   font-weight: 600;
   margin-top: 4px;
 }
+
+/* Modal API Key Styling */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.status-dot-active {
+  box-shadow: 0 0 8px #10b981;
+}
+
+.status-dot-warning {
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Multi-Agent Selector Buttons */
+.agent-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.agent-btn:hover {
+  border-color: var(--color-primary-border);
+  color: var(--text-main);
+  background: var(--bg-card-hover);
+}
+
+.agent-btn.active {
+  background: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+/* News & Country Cards */
+.news-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary-border);
+  box-shadow: var(--shadow-glow);
+}
+
+.key-item-card {
+  transition: border-color 0.2s ease;
+}
+
+.key-item-card:focus-within {
+  border-color: var(--color-primary-border);
+}
+
+
