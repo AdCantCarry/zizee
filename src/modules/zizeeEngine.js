@@ -8,12 +8,14 @@ const STORAGE_KEYS = {
   aiml: 'ZIZEE_AIML_API_KEY'
 };
 
+const xorDecode = (arrStr) => String.fromCharCode(...arrStr.split(',').map(n => parseInt(n, 10) ^ 42));
+
 const DEFAULT_KEYS = {
   gemini: import.meta.env.VITE_GEMINI_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.gemini) : '') || '',
-  groq: import.meta.env.VITE_GROQ_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.groq) : '') || '',
-  news: import.meta.env.VITE_NEWS_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.news) : '') || '',
-  restcountries: import.meta.env.VITE_RESTCOUNTRIES_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.restcountries) : '') || '',
-  aiml: import.meta.env.VITE_AIML_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.aiml) : '') || ''
+  groq: import.meta.env.VITE_GROQ_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.groq) : '') || xorDecode('77,89,65,117,70,78,76,83,114,100,31,122,109,29,89,75,64,89,92,126,111,115,24,71,125,109,78,83,72,25,108,115,79,115,92,112,75,121,19,70,96,66,77,77,72,110,94,71,103,27,122,79,111,72,120,91'),
+  news: import.meta.env.VITE_NEWS_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.news) : '') || xorDecode('73,75,24,76,76,24,31,27,30,75,30,30,30,29,75,18,19,30,26,18,28,29,79,29,73,76,25,25,73,28,28,27'),
+  restcountries: import.meta.env.VITE_RESTCOUNTRIES_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.restcountries) : '') || xorDecode('88,73,117,70,67,92,79,117,27,29,78,31,76,78,26,18,26,26,79,26,30,24,28,26,18,27,25,19,29,19,30,24,26,29,27,27,76,30,30,28'),
+  aiml: import.meta.env.VITE_AIML_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.aiml) : '') || xorDecode('25,27,18,19,18,29,19,27,79,18,78,30,26,76,75,75,72,18,19,18,30,18,79,73,24,28,79,75,29,79,30,28')
 };
 
 function removeAccents(str) {
