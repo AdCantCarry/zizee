@@ -37,14 +37,11 @@ export class ZizeeEngine {
     const keys = {};
     for (const [provider, storageKey] of Object.entries(STORAGE_KEYS)) {
       try {
-        const stored = localStorage.getItem(storageKey);
-        if (stored) {
-          keys[provider] = stored;
-        } else {
-          keys[provider] = DEFAULT_KEYS[provider] || '';
-          if (DEFAULT_KEYS[provider]) {
-            localStorage.setItem(storageKey, DEFAULT_KEYS[provider]);
-          }
+        const stored = (localStorage.getItem(storageKey) || '').trim();
+        const envVal = (DEFAULT_KEYS[provider] || '').trim();
+        keys[provider] = stored || envVal;
+        if (!stored && envVal) {
+          localStorage.setItem(storageKey, envVal);
         }
       } catch (e) {
         keys[provider] = DEFAULT_KEYS[provider] || '';
